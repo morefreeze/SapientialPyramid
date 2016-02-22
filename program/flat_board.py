@@ -1,5 +1,5 @@
 import sys
-from module import Tetrimino, TetriminoFactory, TYPE_SET, NONE_PIC
+from module import Tetrimino, TetriminoFactory, TYPE_SET, NONE_PIC, EMPTY_PIC
 from module import Z, V, Sv, L, Sl, I, P, W, X, O, T, N
 """
 Board put as first quadrant, like this:
@@ -122,27 +122,49 @@ def make_board(n):
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:
-        print """Usage: %s height width type_string
-type set is [%s]""" %(sys.argv[0], TYPE_SET)
+        print """Usage: %s map_file type_string
+type set is [%s], or \"all-xxxx\", or \"all\"""" %(sys.argv[0], TYPE_SET)
         exit(1)
-    n = int(sys.argv[1])
-    if n <= 0:
-        print "side length must >= 0"
-        exit(2)
-    b = make_board(n)
+    map_file = sys.argv[1]
+    b = []
+    with open(map_file) as f:
+        n = int(f.readline())
+        if n <= 0:
+            print "side length must >= 0"
+            exit(2)
+        b = make_board(n)
+        i = 0
+        for line in f:
+            line = line.strip()
+            for j in range(len(line)):
+                try:
+                    b[i][j] = line[j]
+                except:
+                    print "map out of range at line %d, %d" %(i+1, j)
+                    exit(5)
+            i += 1
 
     pics = []
-    if sys.argv[2] == 'all':
+    # support all-xxx
+    if sys.argv[2][:3] == 'all':
         pics = [c for c in TYPE_SET]
-    else:
-        pics = [c for c in sys.argv[2]]
+        if sys.argv[2][3:4] == '-' and len(sys.argv[2][4:]) > 0:
+            for c in sys.argv[2][3:]:
+                if c in pics:
+                    pics.remove(c)
     cnt = 0
     for c in pics:
         if c in TYPE_SET:
             cnt += TetriminoFactory.make(c).length
 
-    if n*(n+1)/2 != cnt:
-        print "this set [%s] can't be solved in %d" %(pics, n)
+    b_cnt = 0
+    for i in range(len(b)):
+        for j in range(len(b[i])):
+            if b[i][j] == EMPTY_PIC:
+                b_cnt += 1
+    if b_cnt != cnt:
+        print "this set [%s] can't be solved, because need %d actual" %(pics, b_cnt, cnt)
+        exit(3)
 
     path = []
     if dfs(b, pics, path):
