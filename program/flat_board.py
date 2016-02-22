@@ -19,7 +19,7 @@ def print_board(b):
     max_width = len(b[-1])
     print '-'*(max_width+2)
     for i in range(len(b)):
-        print '|'+''.join(b[i])+' '*(max_width-len(b[i]))+'|'
+        print '|'+''.join(b[i])+' '*(0)+'|'
     print '-'*(max_width+2)
 
 def print_path(path):
@@ -166,6 +166,7 @@ type set is [%s], or \"all-xxxx\", or \"all\"""" %(sys.argv[0], TYPE_SET)
         print "this set [%s] can't be solved, because need %d actual" %(pics, b_cnt, cnt)
         exit(3)
 
+    print_board(b)
     path = []
     if dfs(b, pics, path):
         print 'Solution is:'
