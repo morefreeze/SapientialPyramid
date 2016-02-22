@@ -11,30 +11,58 @@ class TestTetriminos(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_t(self):
-        t = program.flat_board.TetriminoFactory.make('T')
-        self.assertEqual(t.title, 'T')
-        self.assertEqual(4, len(t.arr))
+    def test_i(self):
+        t = program.flat_board.TetriminoFactory.make('I')
+        self.assertEqual(t.title, 'I')
+        self.assertEquals(t.length, 4)
         arr = [
-        # downward
-            [ (0,0), (0,1), (0,2), (1,1) ],
-        # left
-            [ (0,0), (1,-1), (1,0), (2,0) ],
-        # upward
-            [ (0,0), (1,-1), (1,0), (1,1) ],
-        # right
-            [ (0,0), (1,0), (1,1), (2,0) ],
+            [ (0,0), (0,1), (0,2), (0,3), ],
+            [ (0,0), (1,0), (2,0), (3,0), ],
         ]
         self.assertEqual(t.arr, arr)
+
+    def test_l(self):
+        l = program.flat_board.TetriminoFactory.make('L')
+        self.assertEqual(l.title, 'L')
+        self.assertEquals(l.length, 5)
+        arr = [
+            [ (0,0), (1,0), (2,0), (3,0), (3,1), ],
+            [ (0,0), (1,0), (2,0), (3,0), (3,-1), ],
+            [ (0,0), (0,1), (0,2), (0,3), (1,0), ],
+            [ (0,3), (0,2), (0,1), (0,0), (1,3), ],
+            [ (0,0), (0,1), (1,1), (2,1), (3,1), ],
+            [ (0,1), (0,0), (1,0), (2,0), (3,0), ],
+            [ (0,0), (1,-3), (1,-2), (1,-1), (1,0), ],
+            [ (0,0), (1,3), (1,2), (1,1), (1,0), ],
+        ]
+        self.assertEqual(l.arr, arr)
 
     def test_o(self):
         o = program.flat_board.TetriminoFactory.make('O')
         self.assertEqual(o.title, 'O')
-        self.assertEqual(1, len(o.arr))
+        self.assertEquals(o.length, 4)
         arr = [
-            [ (0,0), (0,1), (1,0), (1,1) ],
+            [ (0,0), (0,1), (1,0), (1,1), ],
         ]
         self.assertEqual(o.arr, arr)
+
+    def test_eq_arr(self):
+        t_func = program.flat_board.Tetrimino.eq_arr
+        arr = [1,2]
+        rarr = [2,1]
+        self.assertTrue(t_func(arr, rarr))
+        arr = [1,2,2]
+        rarr = [2,1,2]
+        self.assertTrue(t_func(arr, rarr))
+        arr = [1,2]
+        rarr = [2]
+        self.assertFalse(t_func(arr, rarr))
+        arr = [1,2]
+        rarr = [2]
+        self.assertFalse(t_func(arr, rarr))
+        arr = [2]
+        rarr = [2,1]
+        self.assertFalse(t_func(arr, rarr))
 
 class TestBoard(unittest.TestCase):
 

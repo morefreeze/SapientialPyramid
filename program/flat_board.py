@@ -69,10 +69,10 @@ def dfs(b, pics, path):
             arr = tetrimino.arr[j]
             pics[i] = NONE_PIC
             if try_place(b, next_x, next_y, arr, pic):
-                path.append((pic, tetrimino.grids[j]))
+                # path.append((pic, tetrimino.grids[j]))
                 if dfs(b, pics, path):
                     return True
-                path.pop()
+                # path.pop()
                 restore_place(b, next_x, next_y, arr)
             pics[i] = pic
     return False
@@ -131,7 +131,11 @@ type set is [%s]""" %(sys.argv[0], TYPE_SET)
         exit(2)
     b = make_board(n)
 
-    pics = [c for c in sys.argv[2]]
+    pics = []
+    if sys.argv[2] == 'all':
+        pics = [c for c in TYPE_SET]
+    else:
+        pics = [c for c in sys.argv[2]]
     cnt = 0
     for c in pics:
         if c in TYPE_SET:
