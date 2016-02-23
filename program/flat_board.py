@@ -17,7 +17,7 @@ def print_board(b):
     """
     if (len(b) == 0): print "(empty)"
     max_width = len(b[-1])
-    print '-'*(max_width+2)
+    print '-'*(2)
     for i in range(len(b)):
         print '|'+''.join(b[i])+' '*(0)+'|'
     print '-'*(max_width+2)
@@ -135,7 +135,7 @@ type set is [%s], or \"all-xxxx\", or \"all\"""" %(sys.argv[0], TYPE_SET)
         b = make_board(n)
         i = 0
         for line in f:
-            line = line.strip()
+            line = line.strip("\n")
             for j in range(len(line)):
                 try:
                     b[i][j] = line[j]
